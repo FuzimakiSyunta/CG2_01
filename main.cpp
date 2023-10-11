@@ -17,11 +17,13 @@
 extern IMGUI_IMPL_API LRESULT
     ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+
 struct Vector3 {
 	float x;
 	float y;
 	float z;
 };
+
 
 struct Vector4 {
 	float x;
@@ -38,6 +40,12 @@ struct Transform {
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
+};
+
+struct Color {
+	int R;
+	int G;
+	int B;
 };
 
 Matrix4x4 MakeIdentity4x4() {
@@ -312,6 +320,19 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	return result;
 }
 
+enum BlendMode
+{
+	kBlendModeNode,
+	kBlendModeNomal,
+	kBlendModeAdd,
+	kBlendModeSubtract,
+	kBlendModeMultily,
+	kBlendModeScreen,
+	kCountOfBlendmode,
+};
+
+
+
 ID3D12DescriptorHeap* CreateDescriptorHeap(
     ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors,
     bool shaderVisible) {
@@ -441,6 +462,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wc.hInstance = GetModuleHandle(nullptr);
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	RegisterClass(&wc);
+
 
 	const int32_t kClientWidth = 1280;
 	const int32_t kClientHeight = 720;
@@ -612,8 +634,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ID3D12Resource* materialResource = CreateBufferResource(device, sizeof(Vector4));
 	Vector4* materialData = nullptr;
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	// 色
-	*materialData = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+	
 
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
@@ -640,6 +661,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	D3D12_BLEND_DESC blendDesc{};
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
+
+
 
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
@@ -714,6 +745,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         {0.0f, 0.0f, 0.0f},
         {0.0f, 0.0f, 0.0f}
     };
+   
 
 	Transform cameraTransform{
 	    {1.0f, 1.0f, 1.0f },
@@ -730,6 +762,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Matrix4x4 worldViewProjectionMatrix =
 	    Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	*wvpData = worldViewProjectionMatrix;
+	float isColor[3] = {1.0f, 1.0f, 1.0f};
+	float isAlpha[3] = {1.0f,1.0f,1.0f};
+	
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -746,14 +781,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		} else {
-
+			// 色
+			*materialData = Vector4(isColor[0], isColor[1], isColor[2], isAlpha[0]);
+			
 			ImGui_ImplDX12_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			ImGui::ShowDemoWindow();
+			ImGui::Begin("window");
+
+
+
+			// float3スライダー
+			ImGui::SliderFloat3("SliderFloat3", isColor, 0.0f,1.0f);//色を変えた
+
+			ImGui::SliderFloat("SliderFloat", isAlpha, 0.0f, 1.0f); // 透明度を変えた
+
+			ImGui::End();
 
 			ImGui::Render();
+
+			
 
 			UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 
