@@ -789,6 +789,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 右下
 	vertexData[2] = {0.5f, -0.5f, 0.0f, 1.0f};
 
+
 	D3D12_VIEWPORT viewport{};
 	viewport.Width = kClientWidth;
 	viewport.Height = kClientHeight;
