@@ -24,15 +24,12 @@ struct Vector3 {
 	float y;
 	float z;
 };
-
-
 struct Vector4 {
 	float x;
 	float y;
 	float z;
 	float w;
 };
-
 struct Matrix4x4 {
 	float m[4][4];
 };
@@ -328,6 +325,10 @@ Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, 1280.0f / 720.0f, 0.1f, 1000.0f);
 
 Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
+
+const uint32_t kNumInstance = 10;//インスタンス数
+Transform transforms[kNumInstance];
+
 struct TransformationMatrix
 {
 	Matrix4x4 WVP;
@@ -344,9 +345,6 @@ enum BlendMode
 	kBlendModeScreen,
 	kCountOfBlendmode,
 };
-
-const uint32_t kNumInstance = 10;//インスタンス数
-Transform transforms[kNumInstance];
 
 
 
@@ -923,7 +921,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 			//commandList->DrawInstanced(3, instanceCount, 0, 0);
 			commandList->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU);
-			commandList->DrawInstanced(6, kNumInstance, 0, 0);
+			commandList->DrawInstanced(3, kNumInstance, 0, 0);
 
 			ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
 
