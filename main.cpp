@@ -486,12 +486,7 @@ IDxcBlob* CompileShader(
 	shaderResult->Release();
 	return shaderBlob;
 
-	for (uint32_t index = 0; index < kNumInstance; ++index)
-	{
-		transforms[index].scale = {1.0f,1.0f,1.0f};
-		transforms[index].rotate = { 0.0f,0.0f,0.0f };
-		transforms[index].translate = {index*0.1f,index * 0.1f,index * 0.1f};
-	}
+	
 
 }
 
@@ -852,6 +847,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float isColor[3] = {1.0f, 1.0f, 1.0f};
 	float isAlpha[3] = {1.0f,1.0f,1.0f};
 	
+	for (uint32_t index = 0; index < kNumInstance; ++index)
+	{
+		transforms[index].scale = { 1.0f,1.0f,1.0f };
+		transforms[index].rotate = { 0.0f,0.0f,0.0f };
+		transforms[index].translate = { index * 0.1f,index * 0.1f,index * 0.1f };
+	}
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -934,6 +935,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			for (uint32_t index = 0; index < kNumInstance; index++)
 			{
+
+
+
+
 				Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
 				Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,viewProjectionMatrix);
 				//instancingData[index].WVP = worldViewProjectionMatrix;
