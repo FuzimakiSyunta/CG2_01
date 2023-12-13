@@ -328,9 +328,6 @@ Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
 
 const uint32_t kNumInstance = 10;//インスタンス数
 
-
-
-
 struct TransformationMatrix
 {
 	Matrix4x4 WVP;
@@ -564,12 +561,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	
 	//Instancing用のTransformationMatrixリソースを作る
+	const uint32_t kNumInstance = 10;
 	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource =
-		CreateBufferResource(device, sizeof(TransformationMatrix)*kNumInstance);
-
-	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResouce = CreateBufferResource(device, sizeof(TransformationMatrix) * kNumInstance);
+	CreateBufferResource(device, sizeof(TransformationMatrix)*kNumInstance);
 	TransformationMatrix* instancingData = nullptr;
-	instancingResouce->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
+	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
 	for (uint32_t index = 0; index < kNumInstance; index++)
 	{
 		instancingData[index].WVP = MakeIdentity4x4();
@@ -684,6 +680,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	descriptorRangeForInstancing[0].NumDescriptors = 1;
 	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	
 
 
 
@@ -834,6 +832,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         {0.0f, 0.0f, 0.0f },
         {0.0f, 0.0f, -5.0f}
     };
+
 	Matrix4x4 worldMatrix =
 	    MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix =
@@ -934,18 +933,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 			commandList->ResourceBarrier(1, &barrier);
 
-
-			
-
 			for (uint32_t index = 0; index < kNumInstance; index++)
 			{
-
-
-
-
 				Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
 				Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,viewProjectionMatrix);
-				//instancingData[index].WVP = worldViewProjectionMatrix;
+				instancingData[index].WVP = worldViewProjectionMatrix;
 			}
 
 
