@@ -329,6 +329,8 @@ Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
 const uint32_t kNumInstance = 10;//インスタンス数
 
 
+
+
 struct TransformationMatrix
 {
 	Matrix4x4 WVP;
