@@ -775,13 +775,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	// 左下
 	vertexData[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-	vertexData[0] = { 0.0f, 1.0f };
+	
 	// 上
 	vertexData[1] = { 0.0f, 0.5f, 0.0f, 1.0f };
-	vertexData[1] = { 0.5f, 0.0f };
+	
 	// 右下
 	vertexData[2] = { 0.5f, -0.5f, 0.0f, 1.0f };
-	vertexData[2] = { 1.0f,1.0f };
+	
 
 
 	D3D12_VIEWPORT viewport{};
