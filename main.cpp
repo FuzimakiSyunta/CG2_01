@@ -19,7 +19,10 @@
 extern IMGUI_IMPL_API LRESULT
     ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
+struct Vector2 {
+	float x;
+	float y;
+};
 struct Vector3 {
 	float x;
 	float y;
@@ -46,6 +49,11 @@ struct Color {
 	int G;
 	int B;
 };
+struct VertexData {
+	Vector4 position;
+	Vector2 texcoord;
+};
+
 
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 result;
@@ -1023,7 +1031,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			commandList->SetGraphicsRootConstantBufferView( 0, materialResource->GetGPUVirtualAddress());
 			//commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 			//commandList->DrawInstanced(3, instanceCount, 0, 0);
-			commandList->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU);
+			commandList->SetGraphicsRootDescriptorTable(2, instancingSrvHandleGPU);
 			commandList->DrawInstanced(3, kNumInstance, 0, 0);
 
 			ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
