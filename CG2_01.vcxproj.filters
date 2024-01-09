@@ -71,9 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Particle.hlsli" />
+    <None Include="Object3d.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Particle.VS.hlsl" />
     <FxCompile Include="Particle.PS.hlsl" />
+    <FxCompile Include="Object3d.PS.hlsl" />
+    <FxCompile Include="Object3d.VS.hlsl" />
   </ItemGroup>
 </Project>
