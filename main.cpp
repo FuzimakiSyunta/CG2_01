@@ -344,7 +344,19 @@ enum BlendMode
 	kBlendModeScreen,
 	kCountOfBlendmode,
 };
-
+ID3D12DescriptorHeap* CreateDescriptorHeep(
+	ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heepType, UINT numDescripters,
+	bool shaderVisible) {
+	ID3D12DescriptorHeap* descripterHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc{};
+	descriptorHeapDesc.Type = heepType;
+	descriptorHeapDesc.NumDescriptors = numDescripters;
+	descriptorHeapDesc.Flags =
+		shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	HRESULT hr = device->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descripterHeap));
+	assert(SUCCEEDED(hr));
+	return descripterHeap;
+}
 
 
 D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
