@@ -880,14 +880,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector4* vertexData = nullptr;
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	// 左下
-	vertexData[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-	
-	// 上
-	vertexData[1] = { 0.0f, 0.5f, 0.0f, 1.0f };
-	
-	// 右下
-	vertexData[2] = { 0.5f, -0.5f, 0.0f, 1.0f };
+	//左下
+	vertexData[0].position = { -0.5f,-0.5f,0.0f,1.0f };
+	vertexData[0].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexData[1].position = { -0.5f,0.5f,0.0f,1.0f };
+	vertexData[1].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexData[2].position = { 0.5f,-0.5f,0.0f,1.0f };
+	vertexData[2].texcoord = { 1.0f,1.0f };
+
+	//右上
+	vertexData[3].position = { -0.5f,0.5f,0.0f,1.0f };
+	vertexData[3].texcoord = { 0.0f,0.0f };
+	//上2
+	vertexData[4].position = { 0.5f,0.5f,0.0f,1.0f };
+	vertexData[4].texcoord = { 1.0f,0.0f };
+	//右下2
+	vertexData[5].position = { 0.5f,-0.5f,0.0f,1.0f };
+	vertexData[5].texcoord = { 1.0f,1.0f };
 	
 
 
