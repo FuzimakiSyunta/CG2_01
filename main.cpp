@@ -359,8 +359,6 @@ D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descrip
 }
 
 
-
-
 ID3D12DescriptorHeap* CreateDescriptorHeap(
     ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors,
     bool shaderVisible) {
@@ -487,6 +485,7 @@ IDxcBlob* CompileShader(
 	
 
 }
+
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
