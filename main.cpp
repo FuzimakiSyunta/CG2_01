@@ -352,13 +352,13 @@ struct Transform {
 };
 // Transform変数を作る。
 Transform transform{
-    {1.0f, 1.0f, 1.0f},
+    {0.5f, -0.85f, 0.5f},
     {0.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, 0.0f}
 };
 
 Transform cameraTransform{
-    {1.0f, 1.0f, 1.0f },
+    {1.0f, 0.0f, 1.0f },
     {0.0f, 0.0f, 0.0f },
     {0.0f, 0.0f, -5.0f}
 };
@@ -881,6 +881,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	IDxcIncludeHandler* includeHandler = nullptr;
 	hr = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
 	assert(SUCCEEDED(hr));
+
 	// RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -990,6 +991,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// DSWeep
 	device->CreateDepthStencilView(
 	    depthStencilResource, &dsvDesc, dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+
 
 	// 書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
@@ -1218,7 +1220,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	    srvDescriptorHeep->GetGPUDescriptorHandleForHeapStart());
 
 	// Textureを読んで転送する
-	DirectX::ScratchImage mipImages = LoadTexture("Resource/uvChecker.png");
+	DirectX::ScratchImage mipImages = LoadTexture("Resource/monsterBall.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	ID3D12Resource* textureResource = CreateTextureResource(device, metadata);
 	UploadTextureData(textureResource, mipImages);
@@ -1331,8 +1333,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			    1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
 			// Spriteの描画、変更が必要なものだけ変更する
 			commandList->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-			// 描画!	（DrawCall/ドローコール)。3頂点で1つのインスタンス。
-			commandList->DrawInstanced(6, 1, 0, 0);
+			//// 描画!	（DrawCall/ドローコール)。3頂点で1つのインスタンス。
+			//commandList->DrawInstanced(6, 1, 0, 0);
 
 #pragma endregion
 
