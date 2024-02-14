@@ -913,7 +913,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ID3D12Resource* depthStencilResouce = CreateDepthStencilTextureResource(device, kClientWidht, kClientHeight);
 
 	//Textyreを読んだ転送する
-	DirectX::ScratchImage mipImages = LoadTexture("Resources/monsterBall.png");
+	DirectX::ScratchImage mipImages = LoadTexture("Resource/monsterBall.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	ID3D12Resource* textureResource = CreateTextureResource(device, metadata);
 	UploadTextureData(textureResource, mipImages);
